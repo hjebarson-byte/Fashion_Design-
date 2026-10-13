@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   VELORA design tokens (Tailwind v4 @theme).
+   These create utilities such as bg-sand, text-ink, border-line, etc.
+------------------------------------------------------------------- */
+@theme {
+  --color-ink: #171717;
+  --color-sand: #f7f6f3;
+  --color-muted: #6e6e6e; /* spec #777777, nudged darker for AA contrast */
+  --color-accent: #b79a70;
+  --color-accent-dark: #8f7650;
+  --color-line: #e8e6e1;
+  --color-sale: #c84c4c;
+  --color-success: #357a50;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+
+  --breakpoint-xs: 30rem;
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+    overflow-x: hidden;
+  }
+  img {
+    @apply block max-w-full;
+  }
+  h1, h2, h3, h4 {
+    @apply font-semibold tracking-tight;
+  }
+  /* Visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-dark);
+    outline-offset: 3px;
+  }
+  .on-dark :focus-visible {
+    outline-color: #fff;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; }
+}
+
+@layer components {
+  .container-x {
+    @apply mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10;
+  }
+  .section-y {
+    @apply py-16 md:py-24;
+  }
+  .eyebrow {
+    @apply text-[11px] font-medium uppercase tracking-[0.28em] text-muted;
+  }
+  .display {
+    @apply font-serif font-normal leading-[1.02] tracking-tight;
+  }
+  .section-title {
+    @apply text-3xl font-semibold uppercase tracking-[0.04em] md:text-4xl;
+  }
+
+  /* Buttons: a colour fill slides in on hover */
+  .btn {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden border px-7 py-3.5 text-[12px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 select-none active:scale-[0.98];
+    isolation: isolate;
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: translateY(101%);
+    transition: transform 0.45s var(--ease-premium);
+  }
+  .btn:hover:not(:disabled)::before { transform: translateY(0); }
+  .btn-primary { @apply border-ink bg-ink text-white; }
+  .btn-primary::before { background: var(--color-accent-dark); }
+  .btn-primary:hover:not(:disabled) { @apply border-accent-dark; }
+  .btn-outline { @apply border-ink bg-transparent text-ink; }
+  .btn-outline::before { background: var(--color-ink); }
+  .btn-outline:hover:not(:disabled) { @apply text-white; }
+  .btn-light { @apply border-white bg-white text-ink; }
+  .btn-light::before { background: var(--color-accent); }
+  .btn-light:hover:not(:disabled) { @apply border-accent; }
+  .btn-ghost-light { @apply border-white bg-transparent text-white; }
+  .btn-ghost-light::before { background: #fff; }
+  .btn-ghost-light:hover:not(:disabled) { @apply text-ink; }
+  .btn:disabled { @apply opacity-50; }
+
+  .link-underline {
+    @apply relative inline-block;
+    background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+    transition: background-size 0.4s var(--ease-premium);
+  }
+  .link-underline:hover { background-size: 0 1px; background-position: 100% 100%; }
+
+  .field {
+    @apply w-full border border-line bg-white px-4 py-3.5 text-sm text-ink transition-colors placeholder:text-[#9a9a9a] focus:border-ink focus:outline-none;
+  }
+  .field-error { @apply border-sale; }
+  .label { @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-ink; }
+  .error-text { @apply mt-1.5 text-xs text-sale; }
+}
+
+/* Hide scrollbars on horizontally scrolling rails */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Slow cinematic zoom for hero imagery */
+@keyframes kenburns {
+  from { transform: scale(1.02); }
+  to { transform: scale(1.12); }
+}
+.kenburns { animation: kenburns 18s ease-out forwards; }
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #f1efea 25%, #f8f7f4 50%, #f1efea 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Respect the user's reduced-motion setting */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
